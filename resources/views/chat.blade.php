@@ -7,7 +7,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Chat</div>
                     <div class="panel-body">
-                        <chat-log></chat-log>
+                        <chat-log :messages="messages"></chat-log>
                         <chat-composer v-on:messageSent="addMessage"></chat-composer>
                     </div>
                 </div>

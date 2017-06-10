@@ -29,4 +29,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 */
 Route::group(['middleware' => ['auth'], 'prefix' => 'chat'], function () {
     Route::get('/', 'Chat\ChatController@index')->name('chat');
+    Route::get('/messages', 'Chat\ChatController@messages')->name('messages');
 });

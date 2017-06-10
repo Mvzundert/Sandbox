@@ -18,7 +18,6 @@ export default {
             message: this.messageText,
             user: "Marius"
         });
-//        console.log(this.messageText);
         this.messageText = '';
     }
   }
