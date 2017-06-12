@@ -29,13 +29,16 @@ class ChatController extends Controller
         return Message::with('user')->get();
     }
 
+    /**
+     * @TODO: This should handle persisting of messages to the DB.
+     * @param Request $request
+     * @return array
+     */
     public function store(Request $request){
         $user = Auth::user();
 
         $user->messages()->create([
             'message' =>$request->get('message')
         ]);
-
-        return ['status' => 'Sent'];
     }
 }
