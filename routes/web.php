@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\messagePosted;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,14 +34,16 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'chat'], function () {
     Route::get('/messages', 'Chat\ChatController@messages')->name('messages');
     // @TODO replace this with better code....
     Route::post('messages', function () {
+        // Store the new message
         $user = Auth::user();
 
-        $user->messages()->create([
+        $message = $user->messages()->create([
             'message' => request()->get('message')
         ]);
 
-        return ['status' => 'Sent'];
+        // Announce that a new message has been posted
+        broadcast(new MessagePosted($message, $user))->toOthers();
     });
     //@TODO: Fix the persisting to the DB in the chat controller where it should be.
-//    Route::post('/messages', 'Chat\ChatController@store')->name('messages.store');
+    //Route::put('/store', 'Chat\ChatController@store')->name('messages.store');
 });

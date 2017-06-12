@@ -37,7 +37,7 @@ const app = new Vue({
         }
     },
     created() {
-        axios.get('s/chat/messages').then(response => {
+        axios.get('/chat/messages').then(response => {
             this.messages = response.data;
         });
 
