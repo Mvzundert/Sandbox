@@ -1102,7 +1102,6 @@ module.exports = g;
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -1126,20 +1125,27 @@ Vue.component('chat-composer', __webpack_require__(42));
 var app = new Vue({
     el: '#app',
     data: {
-        messages: [{
-            message: "Message 1",
-            user: "M. van Zundert"
-        }, {
-            message: "Message 2",
-            user: "Test User"
-        }]
+        messages: []
     },
     methods: {
         addMessage: function addMessage(message) {
+            // Push message to the queue
             this.messages.push(message);
 
-            //            console.log('Message Added!')
+            // Persist to the database etc
+            axios.post('/chat/messages', message).then(function (response) {
+                console.log('saved successfully');
+                console.log(message);
+            });
         }
+    },
+    created: function created() {
+        var _this = this;
+
+        // Add messages to the rest of the screen.
+        axios.get('/chat/messages').then(function (response) {
+            _this.messages = response.data;
+        });
     }
 });
 
@@ -2003,6 +2009,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2015,7 +2022,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     sendMessage: function sendMessage() {
       this.$emit('messagesent', {
         message: this.messageText,
-        user: "Marius"
+        user: {
+          // @TODO should probably not grab it from the DOM. =)
+          // @TODO doing this on page load might be better?
+          name: $('.navbar-right .dropdown-toggle ').text()
+        }
       });
       this.messageText = '';
     }
@@ -2028,6 +2039,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -4517,7 +4531,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)();
-exports.push([module.i, "\n.chat-log .chat-message:nth-child(even){\n    background-color: #faf2cc;\n}\n", ""]);
+exports.push([module.i, "\n.chat-log .chat-message:nth-child(even){\n    background-color: #faf2cc;\n}\n.empty{\n    padding: 1rem;\n    text-align: center;\n}\n", ""]);
 
 /***/ }),
 /* 39 */
@@ -32079,7 +32093,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "/home/marius/code/Sandbox/resources/assets/js/components/ChatComposer.vue"
+Component.options.__file = "/Users/mariusvanzundert/code/Sandbox/resources/assets/js/components/ChatComposer.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ChatComposer.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -32117,7 +32131,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "/home/marius/code/Sandbox/resources/assets/js/components/ChatLog.vue"
+Component.options.__file = "/Users/mariusvanzundert/code/Sandbox/resources/assets/js/components/ChatLog.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ChatLog.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -32155,7 +32169,7 @@ var Component = __webpack_require__(3)(
   /* cssModules */
   null
 )
-Component.options.__file = "/home/marius/code/Sandbox/resources/assets/js/components/ChatMessage.vue"
+Component.options.__file = "/Users/mariusvanzundert/code/Sandbox/resources/assets/js/components/ChatMessage.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] ChatMessage.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -32228,7 +32242,7 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "chat-message"
-  }, [_c('p', [_vm._v(_vm._s(_vm.message.message))]), _vm._v(" "), _c('small', [_vm._v(_vm._s(_vm.message.user))])])
+  }, [_c('p', [_vm._v(_vm._s(_vm.message.message))]), _vm._v(" "), _c('small', [_vm._v(_vm._s(_vm.message.user.name))])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -32245,14 +32259,22 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "chat-log"
-  }, _vm._l((_vm.messages), function(message) {
+  }, [_vm._l((_vm.messages), function(message) {
     return _c('chat-message', {
       key: message.id,
       attrs: {
         "message": message
       }
     })
-  }))
+  }), _vm._v(" "), _c('div', {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: (_vm.messages.length === 0),
+      expression: "messages.length === 0"
+    }],
+    staticClass: "empty"
+  }, [_vm._v("\n    Nothing here yet!\n    ")])], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

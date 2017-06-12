@@ -1,5 +1,6 @@
 <template lang="html">
     <div class="chat-composer">
+
         <input type="text" placeholder="Type here" v-model="messageText" @keyup.enter="sendMessage"/>
         <button class="btn btn-primary" @click="sendMessage">Send</button>
     </div>
@@ -16,7 +17,11 @@ export default {
     sendMessage() {
         this.$emit('messagesent',{
             message: this.messageText,
-            user: "Marius"
+            user: {
+                // @TODO should probably not grab it from the DOM. =)
+                // @TODO doing this on page load might be better?
+                name: $('.navbar-right .dropdown-toggle ').text()
+            }
         });
         this.messageText = '';
     }

@@ -13,13 +13,29 @@ class ChatController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('chat');
     }
 
-    public function Messages()
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function messages()
     {
-        return Message::all();
+        return Message::with('user')->get();
+    }
+
+    public function store(Request $request){
+        $user = Auth::user();
+
+        $user->messages()->create([
+            'message' =>$request->get('message')
+        ]);
+
+        return ['status' => 'Sent'];
     }
 }

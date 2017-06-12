@@ -30,4 +30,16 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth'], 'prefix' => 'chat'], function () {
     Route::get('/', 'Chat\ChatController@index')->name('chat');
     Route::get('/messages', 'Chat\ChatController@messages')->name('messages');
+    // @TODO replace this with better code....
+    Route::post('messages', function () {
+        $user = Auth::user();
+
+        $user->messages()->create([
+            'message' => request()->get('message')
+        ]);
+
+        return ['status' => 'Sent'];
+    });
+    //@TODO: Fix the persisting to the DB in the chat controller where it should be.
+//    Route::post('/messages', 'Chat\ChatController@store')->name('messages.store');
 });

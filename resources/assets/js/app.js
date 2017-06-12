@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -21,23 +20,25 @@ Vue.component('chat-composer', require('./components/ChatComposer.vue'));
 
 const app = new Vue({
     el: '#app',
-     data: {
-         messages: [
-        {
-            message: "Message 1",
-            user: "M. van Zundert"
-        },
-        {
-            message: "Message 2",
-            user: "Test User"
-        }
-        ]
+    data: {
+        messages: []
     },
     methods: {
         addMessage(message) {
+            // Push message to the queue
             this.messages.push(message);
 
-//            console.log('Message Added!')
+            // Persist to the database etc
+            axios.post('/chat/messages', message).then(response => {
+                console.log('saved successfully')
+                console.log(message)
+            })
         }
+    },
+    created(){
+        // Add messages to the rest of the screen.
+        axios.get('/chat/messages').then(response => {
+            this.messages = response.data;
+        })
     }
 });
