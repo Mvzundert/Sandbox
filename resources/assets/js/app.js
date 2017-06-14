@@ -49,12 +49,12 @@ const app = new Vue({
                 this.usersInRoom.push(user);
             })
             .leaving((user) => {
-                this.usersInRoom = this.usersInRoom.filter(u => u != user)
+                this.usersInRoom = this.usersInRoom.filter(usersInRoom => usersInRoom != user)
             })
-            .listen('messagePosted', (e) => {
+            .listen('messagePosted', (event) => {
                 this.messages.push({
-                    message: e.message.message,
-                    user: e.user
+                    message: event.message.message,
+                    user: event.user
                 });
             });
     }

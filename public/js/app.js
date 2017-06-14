@@ -1152,13 +1152,13 @@ var app = new Vue({
         }).joining(function (user) {
             _this.usersInRoom.push(user);
         }).leaving(function (user) {
-            _this.usersInRoom = _this.usersInRoom.filter(function (u) {
-                return u != user;
+            _this.usersInRoom = _this.usersInRoom.filter(function (usersInRoom) {
+                return usersInRoom != user;
             });
-        }).listen('messagePosted', function (e) {
+        }).listen('messagePosted', function (event) {
             _this.messages.push({
-                message: e.message.message,
-                user: e.user
+                message: event.message.message,
+                user: event.user
             });
         });
     }
