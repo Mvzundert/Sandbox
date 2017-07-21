@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Chat;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Message; 
+use App\Message;
 
 class ChatController extends Controller
 {
@@ -34,7 +34,8 @@ class ChatController extends Controller
      * @param Request $request
      * @return array
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $user = Auth::user();
 
         $user->messages()->create([

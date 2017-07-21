@@ -13,7 +13,7 @@ export default {
       messageText: ''
     }
   },
-  methods:{
+
     sendMessage() {
         this.$emit('messagesent',{
             message: this.messageText,
