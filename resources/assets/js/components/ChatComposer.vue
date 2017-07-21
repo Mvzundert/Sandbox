@@ -26,7 +26,6 @@ export default {
         this.messageText = '';
     }
   }
-}
 </script>
 
 <style lang="css">
